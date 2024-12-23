@@ -2,68 +2,65 @@
   <div class="recommend-container">
     <el-card v-loading="loading">
       <template #header>
-        <div class="header">
-          <h3>志愿推荐</h3>
-          <el-button type="primary" @click="handleRefresh">刷新推荐</el-button>
+        <div class="card-header">
+          <span>志愿推荐</span>
+          <el-button @click="fetchRecommendData()" :loading="loading">
+            刷新数据
+          </el-button>
         </div>
       </template>
 
       <div v-if="recommendData" class="recommend-content">
         <!-- 冲刺院校 -->
-        <div class="school-section">
-          <h4>冲刺院校</h4>
-          <school-list :schools="recommendData.chong_schools" />
+        <div class="school-section" v-if="recommendData.chong_schools?.length">
+          <h2>冲刺院校</h2>
+          <school-card 
+            v-for="school in recommendData.chong_schools" 
+            :key="school.id"
+            :school="school"
+            :year="currentYear"
+          />
         </div>
 
-        <!-- 稳妥院校 -->
-        <div class="school-section">
-          <h4>稳妥院校</h4>
-          <school-list :schools="recommendData.wen_schools" />
-        </div>
-
-        <!-- 保底院校 -->
-        <div class="school-section">
-          <h4>保底院校</h4>
-          <school-list :schools="recommendData.bao_schools" />
-        </div>
+        <!-- 其他院校类型... -->
       </div>
-
-      <el-empty v-else description="暂无推荐结果" />
+      
+      <el-empty v-else description="暂无推荐数据" />
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { ElMessage } from 'element-plus'
-import { getMajorRecommend } from '@/api/major'
+import { ref } from 'vue'
+import { getRecommend } from '@/api/major'
 import type { ZYMockResp } from '@/types/api'
-import SchoolList from './components/SchoolList.vue'
+import SchoolCard from '@/components/SchoolCard.vue'
+import { ElMessage } from 'element-plus'
 
 const loading = ref(false)
 const recommendData = ref<ZYMockResp | null>(null)
+const currentYear = new Date().getFullYear().toString()
 
-const fetchRecommend = async () => {
+// 添加重试机制
+const fetchRecommendData = async (retryCount = 3) => {
+  loading.value = true
   try {
-    loading.value = true
-    const data = await getMajorRecommend()
-    console.log('获取到推荐数据:', data)
-    recommendData.value = data
+    recommendData.value = await getRecommend({ year: currentYear })
   } catch (error) {
-    console.error('获取推荐失败:', error)
-    ElMessage.error('获取推荐失败')
+    console.error('获取推荐学校失败:', error)
+    if (retryCount > 0) {
+      ElMessage.warning('正在重试获取数据...')
+      await new Promise(resolve => setTimeout(resolve, 2000)) // 等待2秒后重试
+      return fetchRecommendData(retryCount - 1)
+    }
+    ElMessage.error('获取推荐数据失败，请刷新页面重试')
   } finally {
     loading.value = false
   }
 }
 
-const handleRefresh = () => {
-  fetchRecommend()
-}
-
-onMounted(() => {
-  fetchRecommend()
-})
+// 页面加载时获取数据
+fetchRecommendData()
 </script>
 
 <style scoped>
@@ -71,22 +68,18 @@ onMounted(() => {
   padding: 20px;
 }
 
-.header {
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.header h3 {
-  margin: 0;
-}
-
 .school-section {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
-.school-section h4 {
-  margin: 10px 0;
-  color: #666;
+.school-section h2 {
+  margin-bottom: 16px;
+  color: var(--el-text-color-primary);
 }
 </style> 

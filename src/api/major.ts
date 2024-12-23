@@ -2,12 +2,13 @@ import request from '@/utils/request'
 import type { ZYMockResp } from '@/types/api'
 
 // 获取专业推荐
-export async function getMajorRecommend(): Promise<ZYMockResp> {
+export const getRecommend = async (params: { year: string }): Promise<ZYMockResp> => {
     console.log('[API] 开始请求专业推荐')
     try {
         const response = await request({
             url: '/api/v1/zy/recommend',
-            method: 'get'
+            method: 'get',
+            params
         })
         console.log('[API] 专业推荐请求成功:', response)
         return response
@@ -31,4 +32,4 @@ export async function getMajorDetail(id: number) {
         console.error('[API] 专业详情请求失败:', error)
         throw error
     }
-} 
+}
