@@ -25,6 +25,12 @@ const router = createRouter({
                     name: 'Recommend',
                     component: () => import('@/views/major/Recommend.vue'),
                     meta: { title: '志愿推荐' }
+                },
+                {
+                    path: '/score-distribution',
+                    name: 'ScoreDistribution',
+                    component: () => import('@/views/score/ScoreDistribution.vue'),
+                    meta: { title: '一分一段表' }
                 }
             ]
         },
@@ -32,28 +38,27 @@ const router = createRouter({
             path: '/login',
             name: 'Login',
             component: () => import('@/views/auth/Login.vue'),
-            meta: { requiresAuth: false, title: '登录' }
+            meta: { requiresAuth: false }
         },
         {
             path: '/register',
             name: 'Register',
             component: () => import('@/views/auth/Register.vue'),
-            meta: { requiresAuth: false, title: '注册' }
+            meta: { requiresAuth: false }
         }
     ]
 })
 
 // 需要登录才能访问的路由
-const authRoutes = ['/user', '/recommend']
+const authRoutes = ['/user', '/recommend', '/score-distribution']
 
 router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore()
     const token = userStore.getToken()
 
     // 如果要访问需要登录的页面
-    if (authRoutes.includes(to.path)) {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!token) {
-            // 没有token，跳转到登录页
             next('/login')
             return
         }

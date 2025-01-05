@@ -12,6 +12,10 @@
         >
           <el-menu-item index="/user">个人信息</el-menu-item>
           <el-menu-item index="/recommend">志愿推荐</el-menu-item>
+          <el-menu-item index="/score-distribution">
+            <el-icon><DataLine /></el-icon>
+            <span>一分一段表</span>
+          </el-menu-item>
         </el-menu>
         <div class="user-info">
           <el-dropdown @command="handleCommand">
@@ -42,7 +46,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown, DataLine } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
