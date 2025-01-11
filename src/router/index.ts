@@ -1,56 +1,70 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import AppLayout from '@/components/layout/AppLayout.vue'
 
-const router = createRouter({
-    history: createWebHistory(),
-    routes: [
-        {
-            path: '/',
-            component: AppLayout,
-            meta: { requiresAuth: true },
-            children: [
-                {
-                    path: '',
-                    redirect: '/user'
-                },
-                {
-                    path: '/user',
-                    name: 'UserInfo',
-                    component: () => import('@/views/user/UserInfo.vue'),
-                    meta: { title: '个人信息' }
-                },
-                {
-                    path: '/recommend',
-                    name: 'Recommend',
-                    component: () => import('@/views/major/Recommend.vue'),
-                    meta: { title: '志愿推荐' }
-                },
-                {
-                    path: '/score-distribution',
-                    name: 'ScoreDistribution',
-                    component: () => import('@/views/score/ScoreDistribution.vue'),
-                    meta: { title: '一分一段表' }
-                }
-            ]
-        },
-        {
-            path: '/login',
-            name: 'Login',
-            component: () => import('@/views/auth/Login.vue'),
-            meta: { requiresAuth: false }
-        },
-        {
-            path: '/register',
-            name: 'Register',
-            component: () => import('@/views/auth/Register.vue'),
-            meta: { requiresAuth: false }
-        }
-    ]
-})
+const routes: RouteRecordRaw[] = [
+    {
+        path: '/',
+        component: AppLayout,
+        meta: { requiresAuth: true },
+        children: [
+            {
+                path: '',
+                redirect: '/user'
+            },
+            {
+                path: '/user',
+                name: 'UserInfo',
+                component: () => import('@/views/user/UserInfo.vue'),
+                meta: { title: '个人信息' }
+            },
+            {
+                path: '/recommend',
+                name: 'Recommend',
+                component: () => import('@/views/major/Recommend.vue'),
+                meta: { title: '志愿推荐' }
+            },
+            {
+                path: '/score-distribution',
+                name: 'ScoreDistribution',
+                component: () => import('@/views/score/ScoreDistribution.vue'),
+                meta: { title: '一分一段表' }
+            },
+            {
+                path: '/school',
+                name: 'SchoolSelect',
+                component: () => import('@/views/school/SchoolSelect.vue'),
+                meta: { title: '选择院校' }
+            },
+            {
+                path: '/school/:code/scores',
+                name: 'SchoolDetail',
+                component: () => import('@/views/school/SchoolDetail.vue'),
+                meta: { title: '分数查询' }
+            }
+        ]
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: () => import('@/views/auth/Login.vue'),
+        meta: { requiresAuth: false }
+    },
+    {
+        path: '/register',
+        name: 'Register',
+        component: () => import('@/views/auth/Register.vue'),
+        meta: { requiresAuth: false }
+    }
+]
 
 // 需要登录才能访问的路由
 const authRoutes = ['/user', '/recommend', '/score-distribution']
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+})
 
 router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore()
@@ -78,4 +92,4 @@ router.beforeEach(async (to, from, next) => {
     next()
 })
 
-export default router 
+export default router

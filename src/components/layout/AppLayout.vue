@@ -16,6 +16,10 @@
             <el-icon><DataLine /></el-icon>
             <span>一分一段表</span>
           </el-menu-item>
+          <el-menu-item index="/school">
+            <el-icon><Collection /></el-icon>
+            <span>选择院校</span>
+          </el-menu-item>
         </el-menu>
         <div class="user-info">
           <el-dropdown @command="handleCommand">
@@ -46,7 +50,11 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { ArrowDown, DataLine } from '@element-plus/icons-vue'
+import { 
+  ArrowDown, 
+  DataLine, 
+  Collection
+} from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
