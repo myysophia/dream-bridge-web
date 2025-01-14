@@ -1,89 +1,27 @@
-export const mockSchools = [
-    {
-        name: '清华大学',
-        code: '10003',
-        logo: 'https://static-file.daxue.cn/images/清华大学.png',
-        region: '北京',
-        features: ['985', '211', '双一流'],
-        doctorPoints: 86,
-        masterPoints: 128,
-        website: 'https://www.tsinghua.edu.cn',
-        phone: '010-62793001',
-        email: 'admissions@tsinghua.edu.cn',
-        subjects: ['计算机科学与技术', '电子信息', '机械工程'],
-        lowestScore: 680,
-        lowestRank: 300,
-        enrollmentNum: 120,
-        batch: '本科一批',
-        historyScores: {
-            '2023': 680,
-            '2022': 675,
-            '2021': 671,
-            '2020': 669,
-            '2019': 665
-        }
-    },
-    {
-        name: '北京大学',
-        code: '10001',
-        logo: 'https://static-file.daxue.cn/images/北京大学.png',
-        region: '北京',
-        features: ['985', '211', '双一流'],
-        doctorPoints: 92,
-        masterPoints: 132,
-        website: 'https://www.pku.edu.cn',
-        phone: '010-62751407',
-        email: 'bdzsb@pku.edu.cn',
-        subjects: ['数学', '物理学', '化学'],
-        batch: 'undergraduate',
-        type: 'science'
-    },
-    {
-        name: '浙江大学',
-        code: '10335',
-        logo: 'https://static-file.daxue.cn/images/浙江大学.png',
-        region: '浙江',
-        features: ['985', '211', '双一流'],
-        doctorPoints: 78,
-        masterPoints: 115,
-        website: 'https://www.zju.edu.cn',
-        phone: '0571-87951006',
-        email: 'zsb@zju.edu.cn',
-        subjects: ['生物工程', '电气工程', '控制科学'],
-        batch: 'undergraduate',
-        type: 'science'
-    },
-    {
-        name: '复旦大学',
-        code: '10246',
-        logo: 'https://static-file.daxue.cn/images/复旦大学.png',
-        region: '上海',
-        features: ['985', '211', '双一流'],
-        doctorPoints: 82,
-        masterPoints: 125,
-        website: 'https://www.fudan.edu.cn',
-        phone: '021-65642601',
-        email: 'zsb@fudan.edu.cn',
-        subjects: ['临床医学', '经济学', '新闻传播'],
-        batch: 'undergraduate',
-        type: 'science'
-    },
-    {
-        name: '南京大学',
-        code: '10284',
-        logo: 'https://static-file.daxue.cn/images/南京大学.png',
-        region: '江苏',
-        features: ['985', '211', '双一流'],
-        doctorPoints: 76,
-        masterPoints: 120,
-        website: 'https://www.nju.edu.cn',
-        phone: '025-89683251',
-        email: 'admission@nju.edu.cn',
-        subjects: ['物理学', '化学', '天文学'],
-        batch: 'undergraduate',
-        type: 'science'
+import schoolMajorCode from '@/config/schoolMajorCode.json'
+
+// 将 schoolMajorCode 数据转换为我们需要的格式
+export const mockSchools = schoolMajorCode.data.school.map(school => ({
+    name: school.name,
+    code: school.school_id,
+    logo: `https://static-file.daxue.cn/images/${encodeURIComponent(school.name)}.png`,
+    region: '待补充', // 需要补充地区信息
+    features: [], // 需要补充特色信息
+    doctorPoints: 0, // 需要补充博士点数量
+    masterPoints: 0, // 需要补充硕士点数量
+    website: '', // 需要补充官网
+    phone: '', // 需要补充电话
+    email: '', // 需要补充邮箱
+    subjects: [], // 需要补充一级学科
+    batch: '本科一批', // 需要补充批次
+    historyScores: { // 需要补充历年分数
+        '2024': 0,
+        '2023': 0,
+        '2022': 0,
+        '2021': 0,
+        '2020': 0
     }
-]
+}))
 
 // 添加分数查询结果的类型定义
 export interface ScoreQueryResult {

@@ -11,9 +11,12 @@ const request = axios.create({
 request.interceptors.request.use(
     (config) => {
         const userStore = useUserStore()
-        if (userStore.token) {
-            config.headers.Authorization = userStore.token
+        const token = userStore.getToken()
+
+        if (token) {
+            config.headers.Authorization = token
         }
+        console.log('发送请求:', config.url, config.params)  // 添加日志
         return config
     },
     (error) => {
@@ -25,6 +28,7 @@ request.interceptors.request.use(
 request.interceptors.response.use(
     (response) => {
         const { code, message, data } = response.data
+        console.log('收到响应:', response.data)  // 添加日志
 
         if (code === 1000) {
             return data

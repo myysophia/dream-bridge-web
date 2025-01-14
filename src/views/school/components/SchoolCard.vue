@@ -40,22 +40,6 @@
         </span>
       </div>
 
-      <!-- 分数信息 -->
-      <div class="school-scores">
-        <div class="score-item">
-          <div class="score-label">最低分</div>
-          <div class="score-value">{{ school.lowestScore }}</div>
-        </div>
-        <div class="score-item">
-          <div class="score-label">最低位次</div>
-          <div class="score-value">{{ school.lowestRank }}</div>
-        </div>
-        <div class="score-item">
-          <div class="score-label">录取人数</div>
-          <div class="score-value">{{ school.enrollmentNum }}</div>
-        </div>
-      </div>
-
       <!-- 历年分数趋势 -->
       <div class="score-history">
         <div class="history-title">
@@ -195,9 +179,6 @@ const props = defineProps<{
     phone: string
     email: string
     subjects: string[]
-    lowestScore: number      // 最低分
-    lowestRank: number       // 最低位次
-    enrollmentNum: number    // 录取人数
     batch: string           // 录取批次
     historyScores: Record<string, number> // 历年分数 {年份: 分数}
   }
@@ -472,38 +453,7 @@ const handleViewScores = () => {
 }
 
 .school-scores {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  padding: 12px;
-  margin: 12px 0;
-  background: linear-gradient(135deg, #e6f7ff, #f0f9ff);
-  border-radius: 8px;
-  border: 1px solid #e6f7ff;
-}
-
-.score-item {
-  text-align: center;
-  padding: 6px;
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 6px;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-  }
-}
-
-.score-label {
-  font-size: 12px;
-  color: #666;
-  margin-bottom: 2px;
-}
-
-.score-value {
-  font-size: 16px;
-  font-weight: bold;
-  color: #1890ff;
+  display: none;
 }
 
 .score-history {
